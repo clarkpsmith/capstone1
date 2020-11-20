@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container-fluid">
+<div class="card'" id={{dish.id}}>
+    <br>
+
+    <h1 class="center">{{dish.title}}</h1>
+        <br>
+    <a href="/dish/{{dish.id}}"><img class="center img-rounded" alt={{dish.title}} src="{{dish.image}}"></a>
+    </div>
+    <br>
+    {% if g.user %}
+    <div class="favorite">
+        {% if favorited_recipes and dish.id in favorited_recipes %}
+        <button data-id="{{dish.id}}" class="btn m-2 favorited-btn"><i class="fas fa-star"></i> Remove Dish from Favorites</button>
+        </div>
+        {% else %}
+        <button data-id="{{dish.id}}" class="btn m-2 not-favorited-btn"><i class="fas fa-star"></i> Add Dish to Favorites</button>
+        {% endif %}
+        </div>
+    {% endif %}
+<p>Ready in {{dish.readyInMinutes}} minutes</p>
+<p>Health Score: {{dish.healthScore}}</p>
+<p>Spoonacular Score: {{dish.spoonacularScore}}</p>
+<p>{{dish.summary|striptags}}</p>
+<h3>Ingredients:</h3>
+{% if g.user %}
+<form action="/dish/{{dish.id}}/grocerylist" method="POST">
+<button data-id="{{dish.id}}" class="btn m-2 btns" id="add-to-list">Add Ingredients to Grocery List</button>
+</form>
+{% endif %}
+<ul>
+   
+    {% for ingredient in dish.extendedIngredients %}
+    <li>{{ingredient.originalString}}</li>
+    {% endfor %}
+   
+</ul>
+<h3>Instructions:</h3>
+<ol>
+    {% for step in steps %}
+    <li>{{step}}</li>
+    {% endfor %}
+</ol>
+
+<h5> Additional Information</h5>
+<p>Servings: {{dish.servings}}</p>
+{% if dish.occassions %}
+<p>Occassions:{{dish.occassions}} </p>
+{% endif %}
+<p>Wine Pairing: {{dish.winePairing.pairingText}}</p>
+{% if dish.winePairing.pairedWines %}
+<p>Paired Wines:
+    <ul>
+        {% for wine in dish.winePairing.pairedWines %}
+    <li>{{wine}}</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+</p>
+<form>
+    <input class="left btn btn-outline-secondary" type="button" value="Back" onclick="history.back()">
+</form>
+<br>
+{%if not g.user %}
+<p class="signup-p">Sign up now to save your favorite dishes!</p>
+<a href="/signup" class="btn btn-info btns signup-btn">Sign up</a>
+{% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
+

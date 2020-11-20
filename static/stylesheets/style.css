@@ -1,0 +1,125 @@
+.dish-title {
+  text-decoration: none;
+  color: #3a3a3c;
+  font-weight: bold;
+  margin: 10px;
+}
+
+.dish-title:hover {
+  text-decoration: none;
+  color: rgb(138, 136, 136);
+}
+.brand {
+  color: black;
+  font-weight: bold;
+}
+
+body {
+  color: #3a3a3c;
+  background-image: url("/static/images/athomechefv3.png");
+  background-size: contain;
+  background-color: white;
+
+  background-repeat: no-repeat;
+
+  font-family: "Playfair Display", serif;
+  font-size: 20px;
+}
+
+.font-small {
+  font-size: 14px;
+}
+.navlinks {
+  text-decoration: none;
+  color: white;
+  font-size: 16px;
+}
+
+.navlinks:hover {
+  text-decoration: none;
+  color: rgb(223, 219, 219);
+  transition: all 0.1s;
+}
+
+.nav-block {
+  background-color: rgb(148, 50, 50);
+}
+#seasonal {
+  color: black;
+}
+#seasonal:hover {
+  color: #3a3a3c;
+}
+.btns,
+.not-favorited-btn {
+  background-color: #3a3a3c;
+  float: right;
+  color: white;
+}
+
+.btns:hover,
+.not-favorited-btn:hover {
+  color: white;
+  background-color: #565657;
+
+  transition: all 0.1s;
+}
+.favorite-btn {
+  float: left;
+  background-color: #3a3a3c;
+  color: white;
+}
+.favorited-btn {
+  float: right;
+  background-color: #565657;
+  color: white;
+}
+. .favorited-btn:hover {
+  background-color: #3a3a3c;
+  transition: all 0.1s;
+  color: white;
+}
+.favorite-btn:hover {
+  color: white;
+  background-color: #565657;
+
+  transition: all 0.1s;
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
+.signup-btn {
+  float: left;
+}
+
+.card {
+  border-radius: 10px;
+
+  box-shadow: 0px 0px 2px #565657;
+}
+
+.card-img-top {
+  border-radius: 10px 10px 0px 0px;
+  box-shadow: 0px 0px 2px #565657;
+}
+
+.img-rounded {
+  border-radius: 5px;
+}
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 70%;
+}
+
+.navbar-toggler {
+  float: right;
+}
