@@ -20,7 +20,7 @@
 </head>
 
 <body>
-<nav class="navbar navbar-default navbar-right navbar-dark nav-block navbar-expand-md">
+<nav class="navbar navbar-default navbar-right navbar-dark nav-block navbar-expand-lg">
   <div class="container-fluid">
     <div class="navbar-header">
       <a href="/" class="navbar-brand">
@@ -32,8 +32,12 @@
         </button>
       <div class="collapse navbar-collapse" id="collapsibleNavbar">        
     <ul class="nav navbar-dark navbar-nav">
+      <li><a href="/" class="navlinks m-2">
+          Search</a></li>
     <li><a href="/seasonal" class="navlinks m-2">
         Seasonal Dishes</a></li>
+  <li><a href="/searchbyingredients" class="navlinks m-2">
+      Search By Ingredients</a></li>
         {% if g.user %}
         <li><a class="navlinks m-2" href="/user">Favorites</a></li>
         {% endif %}

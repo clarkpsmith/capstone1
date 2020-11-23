@@ -33,11 +33,14 @@ ptyprocess==0.6.0
 pycparser==2.19
 Pygments==2.2.0
 python-dateutil==2.7.3
+python-http-client==3.3.1
 pytz==2020.4
 requests==2.25.0
+sendgrid==6.4.7
 simplegeneric==0.8.1
 six==1.11.0
 SQLAlchemy==1.2.12
+starkbank-ecdsa==1.1.0
 text-unidecode==1.2
 traitlets==4.3.2
 urllib3==1.26.2

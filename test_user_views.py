@@ -350,3 +350,16 @@ class UserViewsTestCase(TestCase):
         html3 = res3.get_data(as_text=True)
         self.assertIn("Roast Chicken", html3)
             
+
+    def test_send_grocery_list(self):
+        """ test sending grocery list email to user"""
+
+        with app.test_client() as client:
+            with client.session_transaction() as sess:
+                sess[CURR_USER_KEY] = self.user1.id
+            res = client.post("/dish/654959/grocerylist", follow_redirects=True)
+            html = res.get_data(as_text=True)
+            self.assertEqual(res.status_code, 200)
+            self.assertIn("Pasta With Tuna", html)      
+            self.assertIn("Grocery list has been sent to your email address!", html)
+

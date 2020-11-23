@@ -29,6 +29,10 @@ body {
 .font-small {
   font-size: 14px;
 }
+
+.font-small {
+  font-size: 12px;
+}
 .navlinks {
   text-decoration: none;
   color: white;

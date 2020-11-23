@@ -1,7 +1,9 @@
 import os
 import requests, json
 from datetime import datetime
-from flask_mail import Mail, Message
+# from flask_mail import Mail, Message
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 from apikey import API_SECRET_KEY
 from flask import Flask, render_template, request, flash, redirect, session, g, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
@@ -140,6 +142,44 @@ def show_homepage():
     session["icon"] = vars[1]
     return render_template("home.html")
 
+@app.route("/searchbyingredients", methods=["GET"])
+def show_search_by_ingredients():
+    """show search by ingredients"""
+    vars = season()
+    session["season"] = vars[0]
+    session["icon"] = vars[1]
+    return render_template("searchbyingredients.html")
+
+@app.route("/searchbyingredients", methods=["POST"])
+def get_results_by_ingredients():
+    """get results by ingredients"""
+    ingredients = request.form["ingredients"]
+ 
+    response = requests.get(f"https://api.spoonacular.com/recipes/findByIngredients?ingredients={ingredients}&number=10&apiKey={API_SECRET_KEY}&addRecipeInformation=true")
+    results = response.json()
+  
+    # for result in results:
+    #     print(result.id)
+    # results = [e for e in list]
+
+    if not len(results):
+        no_results = "No recipes available with those ingredients, check your spelling"
+    else:
+        no_results = ""
+    
+    if g.user:
+        if g.user.recipes:
+            favorited_recipes = [recipe.recipe_id for recipe in g.user.recipes]
+        else:
+            favorited_recipes = None
+    else:
+        favorited_recipes = None
+        
+    return render_template("searchbyingredients.html", results = results, no_results= no_results, favorited_recipes = favorited_recipes)
+
+
+
+
 @app.route("/", methods=["POST"])
 def get_results():
     """show homepage"""
@@ -174,10 +214,13 @@ def show_dish(dish_id):
     """show recipe for specific dish"""
     response = requests.get(f"https://api.spoonacular.com/recipes/{dish_id}/information?&apiKey={API_SECRET_KEY}")
     dish = response.json()
+    print(dish)
+    if dish["analyzedInstructions"]:
+        for step in dish["analyzedInstructions"]:
+            steps = [ e["step"] for e in step["steps"] ] 
 
-   
-    for step in dish["analyzedInstructions"]:
-       steps = [ e["step"] for e in step["steps"] ]
+    else:
+        steps = []
     
     if g.user:
         if g.user.recipes:
@@ -198,20 +241,35 @@ def send_grocery_list(dish_id):
 
     response = requests.get(f"https://api.spoonacular.com/recipes/{dish_id}/information?&apiKey={API_SECRET_KEY}")
     dish = response.json()
-    grocery_list = ''
-    for ingredient in dish["extendedIngredients"]: 
-        grocery_list += (f'<li>{ingredient["originalString"]}</li>')
 
-    list_html = f'<ul> {grocery_list} </ul>'  
-    print(list_html)
+    if dish["analyzedInstructions"]:
+        for step in dish["analyzedInstructions"]:
+            steps = [ e["step"] for e in step["steps"] ] 
 
-    msg = Message("Grocery List for Dish")
-    msg.add_recipient(f'{g.user.email}')
-    msg.html = list_html
-    mail.send(msg)
+    else:
+        steps = []
+    
 
-    flash("Grocery list has been sent to your email address!", "success")
+    html = render_template("ingredientslist.html", dish = dish, steps = steps)
 
+    message = Mail(
+    from_email='recipeingredients@athomechef.live',
+    to_emails=g.user.email,
+    subject= f'Ingredients List For {dish["title"]}',
+    html_content= html
+    )
+    try:
+        sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+        response = sg.send(message)
+        print(response.status_code)
+        print(response.body)
+        print(response.headers)
+        flash("Grocery list has been sent to your email address!", "success")
+
+    except Exception as e:
+        print(e.message)
+        flash("Grocery list was not succesfully sent to your email address", "danger")
+   
     return redirect(f"/dish/{dish_id}")
 
 @app.route("/user")

@@ -27,7 +27,7 @@
 <h3>Ingredients:</h3>
 {% if g.user %}
 <form action="/dish/{{dish.id}}/grocerylist" method="POST">
-<button data-id="{{dish.id}}" class="btn m-2 btns" id="add-to-list">Add Ingredients to Grocery List</button>
+<button data-id="{{dish.id}}" class="btn m-2 btns" id="add-to-list">Email Ingredients List To Yourself</button>
 </form>
 {% endif %}
 <ul>
@@ -59,14 +59,23 @@
     </ul>
     {% endif %}
 </p>
-<form>
-    <input class="left btn btn-outline-secondary" type="button" value="Back" onclick="history.back()">
-</form>
+
+<br>
+<br>
 <br>
 {%if not g.user %}
 <p class="signup-p">Sign up now to save your favorite dishes!</p>
 <a href="/signup" class="btn btn-info btns signup-btn">Sign up</a>
 {% endif %}
+<br>
+<br>
+<br>
+<form>
+    <input class="right btn btn-outline-secondary" type="button" value="Back" onclick="history.back()">
+</form>
+<br>
+<br>
+<br>
 
 
 
