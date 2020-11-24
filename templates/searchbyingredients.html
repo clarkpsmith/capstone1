@@ -25,8 +25,8 @@
             </div>
             <br>
             {% for result in results %}
-            <div class="col d-flex justify-content-center container result">
-                <div class="card" style="width: 500px" id={{result.id}}>
+            <div class="col d-flex justify-content-center container-fluid result">
+                <div class="card" style="width: 650px" id={{result.id}}>
                     <a href="/dish/{{result.id}}"><img style="max-width:100%;" class="card-img-top" alt={{result.title}}
                             src="{{result.image}}"></a>
                     <br>
@@ -86,12 +86,10 @@
     </div>
 </div>
 <br>
-<br>
-<br>
+
 <form>
     <input class="right btn btn-outline-secondary" type="button" value="Back" onclick="history.back()">
 </form>
 <br>
-<br>
-<br>
+
 {% endblock %}

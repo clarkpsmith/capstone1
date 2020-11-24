@@ -1,32 +1,11 @@
-"""User model tests."""
-
-# run these tests like:
-#
-#    python -m unittest test_user_model.py
-
 from app import app
 import os
 from unittest import TestCase
 
-from models import db, User, Recipe, User_Favorite
+from models import db, User
 from sqlalchemy import exc
 
-# BEFORE we import our app, let's set an environmental variable
-# to use a different database for tests (we need to do this
-# before we import our app, since that will have already
-# connected to the database
-
 os.environ['DATABASE_URL'] = "postgresql:///athomecheftest"
-
-
-# Now we can import app
-
-
-# Create our tables (we do this here, so we only create the tables
-# once for all tests --- in each test, we'll delete the data
-# and create fresh new clean test data
-db.create_all()
-
 
 class UserModelTestCase(TestCase):
     """Test user model."""
@@ -48,11 +27,12 @@ class UserModelTestCase(TestCase):
         db.session.commit()
 
         self.user1 = User.query.get(user1_id)
-        self.client = app.test_client()
+      
 
     def tearDown(self):
         res = super().tearDown()
         db.session.rollback()
+        db.drop_all()
         return res
 
     def test_user_model(self):
@@ -71,20 +51,14 @@ class UserModelTestCase(TestCase):
         db.session.commit()
         user = User.query.get(u_id)
 
-        # User should have no recipes
         self.assertEqual(len(user.recipes), 0)
         self.assertEqual(user.email, "test@test.com")
         self.assertEqual(user.first_name, "testfirst")
         self.assertEqual(user.username, "testuser")
 
-
-
-    # def test__repr__(self):
-    #     self.assertEqual(self.user1.__repr__(),
-    #                      f"<User #{self.user1.id}: {self.user1.username}, {self.user1.email}>")
-
-
     def test_valid_signup(self):
+        """test valid signup"""
+
         user_test = User.signup(
             "user_test", "testfirst", "testlast", "user_test@gmail.com", "password" )
         user_test.id = 3000
@@ -100,6 +74,8 @@ class UserModelTestCase(TestCase):
         self.assertTrue(test_user.password.startswith("$2b$"))
 
     def test_invalid_username_signup(self):
+        """test that using an existing username on signup raises an error"""
+
         user_test = User.signup(
             "user1", "testfirst", "testlast", "user_test@gmail.com", "password")
         user_test.id = 4000
@@ -107,6 +83,7 @@ class UserModelTestCase(TestCase):
             db.session.commit()
 
     def test_invalid_email_signup(self):
+        """test no email address input raises error"""
 
         user_test = User.signup(
             "user3","testfirst", "testlast", None, "password" )
@@ -114,8 +91,8 @@ class UserModelTestCase(TestCase):
         with self.assertRaises(exc.IntegrityError) as context:
             db.session.commit()
 
-
     def test_invalid_first_name_signup(self):
+        """test invalid first name on signup"""
 
         user_test = User.signup(
             "user3","user_test@gmail.com", None, "testlast", "password" )
@@ -123,8 +100,8 @@ class UserModelTestCase(TestCase):
         with self.assertRaises(exc.IntegrityError) as context:
             db.session.commit()
 
-
     def test_invalid_last_name_signup(self):
+        """test invalid last name on signup"""
 
         user_test = User.signup(
             "user3","user_test@gmail.com", "testfirst", None, "password" )
@@ -133,6 +110,7 @@ class UserModelTestCase(TestCase):
             db.session.commit()
 
     def test_invalid_password(self):
+        """test invalid password"""
 
         with self.assertRaises(ValueError) as context:
             user_test = User.signup(

@@ -3,24 +3,8 @@ import os
 from unittest import TestCase
 
 from models import db, User, Recipe, User_Favorite
-from sqlalchemy import exc
-
-# BEFORE we import our app, let's set an environmental variable
-# to use a different database for tests (we need to do this
-# before we import our app, since that will have already
-# connected to the database
 
 os.environ['DATABASE_URL'] = "postgresql:///athomecheftest"
-
-
-# Now we can import app
-
-
-# Create our tables (we do this here, so we only create the tables
-# once for all tests --- in each test, we'll delete the data
-# and create fresh new clean test data
-db.create_all()
-
 
 class UserRecipeModelTestCase(TestCase):
     """Test user model."""
@@ -48,11 +32,12 @@ class UserRecipeModelTestCase(TestCase):
         db.session.commit()
 
         self.user1 = User.query.get(user1_id)
-        self.client = app.test_client()
+  
 
     def tearDown(self):
         res = super().tearDown()
         db.session.rollback()
+        db.drop_all()
         return res
 
 
@@ -85,6 +70,7 @@ class UserRecipeModelTestCase(TestCase):
         self.assertEqual(len(User_Favorite.query.all()), 1)
         favorite = User_Favorite.query.get(4000)
         self.assertEqual(favorite.user_id, self.user1.id)
+        
 
       
     

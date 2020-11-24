@@ -3,7 +3,7 @@
 <div class="col d-flex justify-content-center container result">
     <div class="home-hero m-4">
         <br>
-        <h1 class="display-3 text-center"><span>{% if session["icon"] == "snowflake" %}
+        <h1 class="display-2 text-center"><span>{% if session["icon"] == "snowflake" %}
         <img height="1px" src="/static/images/icons/snowflake.png" alt="snowflake">
         {% elif session["icon"] == "umbrella" %}
         <img height="25px" src="/static/images/icons/umbrella.png" alt="umbrella">
@@ -18,7 +18,7 @@
         <div id="search-results">
             {% for result in results %}
             <div class="col d-flex justify-content-center container result">
-                <div class="card" style="max-width: 500px" id={{result.id}}>
+                <div class="card" style="width: 650px" id={{result.id}}>
                     <a href="/dish/{{result.id}}"><img style="max-width:100%;" class="card-img-top" alt={{result.title}}
                             src="{{result.image}}"></a>
                     <br>
@@ -54,15 +54,13 @@
             </div>
         </div>
         <br>
-        <br>
-       
-        <br>
+     <br>
         {% if not g.user %}
         <p><a class="dish-title" href="/signup"> Sign up here to save your favorite dishes!</a></p>
         <a href="/signup" class="btn btns signup-btn">Sign up</a>
         {% endif %}
         <br>
-        <br>
+     
         <form>
             <input class="right btn btn-outline-secondary" type="button" value="Back" onclick="history.back()">
         </form>

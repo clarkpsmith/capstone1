@@ -1,42 +1,27 @@
 import os
 import requests, json
 from datetime import datetime
-# from flask_mail import Mail, Message
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
-from apikey import API_SECRET_KEY
+from apikey import API_SECRET_KEY, SENDGRID_API_KEY
 from flask import Flask, render_template, request, flash, redirect, session, g, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 
 
 
-from models import db, connect_db, season, User_Favorite, User, Recipe
+from models import db, connect_db, season, User_Favorite, User_Comment, User, Recipe
 from forms import UserAddForm, LoginForm
 
 CURR_USER_KEY = "curr_user"
 
 app = Flask(__name__)
 
-# #mailserver
-# app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-# app.config['MAIL_PORT'] = 587
-# app.config['MAIL_USE_TLS'] = True
-# app.config['MAIL_USE_SSL'] = False
-# # app.config['MAIL_DEBUG'] = True
-# app.config['MAIL_USERNAME'] = "clark.smith79@gmail.com"
-# app.config['MAIL_PASSWORD'] = EMAIL_PASSWORD
-# app.config['MAIL_DEFAULT_SENDER'] = "clark.smith79@gmail.com"
-# mail = Mail(app)
 
-# Get DB_URI from environ variable (useful for production/testing) or,
-# if not set there, use development local db.
 app.config['SQLALCHEMY_DATABASE_URI'] = (
     os.environ.get('DATABASE_URL', 'postgres:///athomechef'))
-
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
-
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "it's a secret")
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 toolbar = DebugToolbarExtension(app)
@@ -73,11 +58,8 @@ def do_logout():
 @app.route('/signup', methods=["GET", "POST"])
 def signup():
     """Handle user signup.
-
     Create new user and add to DB. Redirect to home page.
-
     If form not valid, present form.
-
     If the there already is a user with that username: flash message
     and re-present form.
     """
@@ -157,10 +139,6 @@ def get_results_by_ingredients():
  
     response = requests.get(f"https://api.spoonacular.com/recipes/findByIngredients?ingredients={ingredients}&number=10&apiKey={API_SECRET_KEY}&addRecipeInformation=true")
     results = response.json()
-  
-    # for result in results:
-    #     print(result.id)
-    # results = [e for e in list]
 
     if not len(results):
         no_results = "No recipes available with those ingredients, check your spelling"
@@ -214,7 +192,8 @@ def show_dish(dish_id):
     """show recipe for specific dish"""
     response = requests.get(f"https://api.spoonacular.com/recipes/{dish_id}/information?&apiKey={API_SECRET_KEY}")
     dish = response.json()
-    print(dish)
+   
+
     if dish["analyzedInstructions"]:
         for step in dish["analyzedInstructions"]:
             steps = [ e["step"] for e in step["steps"] ] 
@@ -229,8 +208,11 @@ def show_dish(dish_id):
             favorited_recipes = None
     else: 
         favorited_recipes = None
-        
-    return render_template("dish.html", dish = dish, steps = steps, favorited_recipes = favorited_recipes)
+
+    comments  = User_Comment.query.filter(User_Comment.recipe_id == dish_id).order_by(
+    User_Comment.timestamp.desc()).all()
+
+    return render_template("dish.html", dish = dish, steps = steps, favorited_recipes = favorited_recipes, comments = comments)
 
 @app.route("/dish/<int:dish_id>/grocerylist", methods=["POST"])
 def send_grocery_list(dish_id):
@@ -259,15 +241,13 @@ def send_grocery_list(dish_id):
     html_content= html
     )
     try:
-        sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+        sg = SendGridAPIClient(os.environ.get(SENDGRID_API_KEY))
         response = sg.send(message)
-        print(response.status_code)
-        print(response.body)
-        print(response.headers)
+
         flash("Grocery list has been sent to your email address!", "success")
 
     except Exception as e:
-        print(e.message)
+        print(e)
         flash("Grocery list was not succesfully sent to your email address", "danger")
    
     return redirect(f"/dish/{dish_id}")
@@ -283,11 +263,11 @@ def show_user_details():
     else:
         favorites = User_Favorite.query.filter(User_Favorite.user_id == g.user.id).order_by(
         User_Favorite.timestamp.desc()).all()
-        print(favorites)
+      
         ordered_recipe_ids = [ favorite.recipe_id for favorite in favorites]
-        print(ordered_recipe_ids)
+  
         ordered_favorites = [Recipe.query.get(id) for id in ordered_recipe_ids]
-        print(ordered_favorites)
+      
         return render_template("users/details.html", favorites = ordered_favorites )
 
 
@@ -331,6 +311,47 @@ def remove_favorite_dish(dish_id):
     return jsonify(message="Removed Favorite")
 
 
+
+
+@app.route("/dish/<int:dish_id>/comment", methods=["POST"])
+def post_comment(dish_id):
+    """post user comment"""
+    if not g.user:
+        flash("Access Denied Please Login First", "danger")
+        return redirect("/login")
+
+    comment = request.form["comment"]
+
+
+    if not Recipe.query.get(dish_id):
+        response = requests.get(f"https://api.spoonacular.com/recipes/{dish_id}/information?&apiKey={API_SECRET_KEY}")
+        dish = response.json()
+        new_recipe = Recipe(recipe_id = dish_id, title = dish["title"], image= dish["image"])
+        db.session.add(new_recipe)
+        db.session.commit()
+        
+    timestamp = datetime.utcnow()
+    new_comment = User_Comment(user_id = g.user.id, timestamp = timestamp, recipe_id = dish_id, comment = comment)
+    db.session.add(new_comment)
+    db.session.commit()
+    
+    return redirect(f"/dish/{dish_id}")
+
+
+@app.route("/comment/<int:comment_id>/delete", methods=["POST"])
+def delete_comment(comment_id):
+    """delete users comment"""
+    if not g.user:
+        flash("Access Denied Please Login First", "danger")
+        return redirect("/login")
+
+    comment = User_Comment.query.get(comment_id)
+    db.session.delete(comment)
+    db.session.commit()
+
+    return jsonify(message="comment deleted")
+
+
 @app.route("/seasonal")
 def show_seasonal_dish():
     """show random seasonal dish"""
@@ -362,7 +383,7 @@ def show_delete_profile():
         return redirect("/login") 
 
     
-    return render_template("deleteprofile.html")
+    return render_template("/users/deleteprofile.html")
 
 
 

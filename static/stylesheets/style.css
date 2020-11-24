@@ -12,6 +12,7 @@
 .brand {
   color: black;
   font-weight: bold;
+  font-size: 20px;
 }
 
 body {
@@ -26,17 +27,20 @@ body {
   font-size: 20px;
 }
 
+/* @media (max-width: 411px) {
+  body {
+    font-size: 30px;
+  }
+} */
+
 .font-small {
   font-size: 14px;
 }
 
-.font-small {
-  font-size: 12px;
-}
 .navlinks {
   text-decoration: none;
   color: white;
-  font-size: 16px;
+  font-size: 18px;
 }
 
 .navlinks:hover {
@@ -78,7 +82,7 @@ body {
   background-color: #565657;
   color: white;
 }
-. .favorited-btn:hover {
+.favorited-btn:hover {
   background-color: #3a3a3c;
   transition: all 0.1s;
   color: white;
@@ -121,9 +125,49 @@ body {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 70%;
+  width: 100%;
 }
 
 .navbar-toggler {
   float: right;
+}
+
+.comments {
+  color: white;
+  padding: 10px;
+  margin: none;
+}
+
+.comments-border {
+  border: 1px solid lightgrey;
+  border-radius: 5px;
+}
+.comment {
+  padding: 15px;
+  background-color: white;
+}
+
+.date {
+  font-size: 12px;
+  color: grey;
+}
+
+.comment-block {
+  background-color: rgb(148, 50, 50);
+}
+
+.search-input {
+  position: relative;
+  bottom: 6px;
+}
+
+.diet-label {
+  margin-left: 3px;
+}
+.comment-body {
+  margin: auto;
+}
+
+.contents {
+  padding: 50px;
 }
