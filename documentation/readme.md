@@ -10,7 +10,8 @@ Creating a user profile also allows the user to comment/review recipes that are 
 
 User passwords are hashed using Bcrypt encryption and stored as encrypted data.
 
-You can visit the site at http://www.athomechef.live
+You can visit the site at [https://at-home-chef.herokuapp.com/
+]()
 
 **Front End Tech Stack**
 
@@ -22,7 +23,7 @@ You can visit the site at http://www.athomechef.live
 
 **API's**
 
-https://spoonacular.com/food-api/ 
+[https://spoonacular.com/food-api/ ]()
 
-https://sendgrid.com/
+[https://sendgrid.com/]()
  
