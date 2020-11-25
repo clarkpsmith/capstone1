@@ -10,61 +10,48 @@ STEP 1
 
 * Create a website that allows users to search for specific recipes which includes ingredient lists, and cooking steps. Cooking time, nutritional value
 
+* Ability to search recipes by no filter or by dietary restrictions or by ingredients.
 
-* Ability to search recipes by country(“cuisine”), dietary restrictions
+* included wine pairing suggestions
 
-
-* Could included wine pairing suggestions
-
-
+* Offer seasonal dish suggestions to users based on the time of year and/or holiday. Requests a random(popular) food that has the tag of the season in it(season would be a variable based off of the date) 
 
 
 
 
-Step 2
+Step 2 User Profile
 
-
-Create a user profile to save favorite recipes for easy access. User passwords would be encrypted with bcrypt
-
-
-* Ability to send an email of ingredient list for shopping 
-* Offer seasonal dish suggestions to user 
-
-
-
-
-Requests a random(popular) food that has the tag of the season in it(season would be a variable based off of the date) 
-
-
-https://api.spoonacular.com/recipes/random?tags=summer&number=1&apiKey=33ada0d281bd47f59315f6a889b8ca84
-
-
-
-
-
+* Create a user profile. User passwords would be encrypted with bcrypt
+* ability to save favorite recipes for easy access.
+* Ability to send an email of ingredient list for shopping using the sendgrid email API
+* ability to publicly comment on a recipe/leave a review
 
 Database Schema 
-Would need to use a many to many relationship to link users to favorites recipes
+Would need to use a many to many relationship to link users to favorites recipes, and also a many to many to link users to comments and recipes
 
 
-Users
-Id
-Username
-Email
+users
+id Primary Key
+username
+email
 first_name
 last_name
+password
 
-
-
-
-Recipes
-Id
-Spoonacular_recipe_id
+recipes
+recipe_id Primary Key
 Title
 Image
-imagetype
-
 
 users_favorites
-Foreign Key users.id
-Foreign Key recipes.id
+id Primary Key
+user_id Foreign Key 
+recipe_id Foreign Key 
+timestamp
+
+users_comments
+id Primary key
+user_id Foreign Key
+time_stamp
+recipe_id Foreign Key
+comment
