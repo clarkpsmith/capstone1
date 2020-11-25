@@ -190,10 +190,10 @@ def season():
         icon = "tulip"
     elif season  in "summer":
         icon = "umbrella"
-    elif season  in ["fall", "autumn", "thanksgiving"]:
+    elif season  in ["fall", "autumn"]:
         icon = "maple_leaf"
-    else:
-        icon = ''
+    elif season in "thanksgiving":
+        icon = "turkey"
     return [season, icon]
 
     

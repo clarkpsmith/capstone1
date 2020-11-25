@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class="container-fluid">
+<div>
 <div id={{dish.id}}>
     <br>
 
-    <h1 class="center">{{dish.title}}</h1>
+    <h1 class="text-center">{{dish.title}}</h1>
         <br>
-    <a href="/dish/{{dish.id}}"><img style="width: 650px"class="center img-rounded" alt={{dish.title}} src="{{dish.image}}"></a>
-    </div>
+    <a href="/dish/{{dish.id}}"><img class="img-rounded text-center"  alt={{dish.title}} src="{{dish.image}}"></a>
+
     <br>
     {% if g.user %}
     <div class="favorite">
@@ -104,8 +104,6 @@
 <p class="signup-p">Sign up now to save your favorite dishes!</p>
 <a href="/signup" class="btn btn-info btns signup-btn">Sign up</a>
 {% endif %}
-<br>
-<br>
 <br>
 <form>
     <input class="right btn btn-outline-secondary" type="button" value="Back" onclick="history.back()">

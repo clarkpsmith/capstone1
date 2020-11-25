@@ -1,25 +1,27 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="col d-flex justify-content-center container result">
-    <div class="home-hero m-4">
-        <br>
-        <h1 class="display-2 text-center"><span>{% if session["icon"] == "snowflake" %}
-        <img height="1px" src="/static/images/icons/snowflake.png" alt="snowflake">
+    <div>
+   
+        <h1 class="display-2 text-center heading"><span>{% if session["icon"] == "snowflake" %}
+        <img class="season-logo" height="90px" src="/static/images/icons/snowflake.png" alt="snowflake">
         {% elif session["icon"] == "umbrella" %}
-        <img height="25px" src="/static/images/icons/umbrella.png" alt="umbrella">
+        <img class="season-logo" height=90px" src="/static/images/icons/umbrella.png" alt="umbrella">
         {% elif session["icon"] == "maple_leaf" %}
-        <img height="90px" src="/static/images/icons/maple_leaf.png" alt="maple_leaf">
+        <img class="season-logo" height="90px" src="/static/images/icons/maple_leaf.png" alt="maple_leaf">
+        {% elif session["icon"] == "turkey" %}
+        <img class="season-logo" height="90px" src="/static/images/icons/turkey.png" alt="turkey">
         {% elif session["icon"] == "tulip" %}
-        <img height="25px" src="/static/images/icons/tulip.png" alt="tulip">
+        <img class="season-logo" height="90px" src="/static/images/icons/tulip.png" alt="tulip">
         {% else %}
         {% endif %}</span>Seasonal Dishes</h1>
         <br>
-        <br>
+
         <div id="search-results">
             {% for result in results %}
             <div class="col d-flex justify-content-center container result">
-                <div class="card" style="width: 650px" id={{result.id}}>
-                    <a href="/dish/{{result.id}}"><img style="max-width:100%;" class="card-img-top" alt={{result.title}}
+                <div class="card card-width" id={{result.id}}>
+                    <a href="/dish/{{result.id}}"><img class="card-img-top img-rounded" alt={{result.title}}
                             src="{{result.image}}"></a>
                     <br>
                     <h2 class="text-center"><a class="card-title text-center dish-title"

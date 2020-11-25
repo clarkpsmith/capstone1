@@ -27,12 +27,6 @@ body {
   font-size: 20px;
 }
 
-/* @media (max-width: 411px) {
-  body {
-    font-size: 30px;
-  }
-} */
-
 .font-small {
   font-size: 14px;
 }
@@ -119,6 +113,13 @@ body {
 
 .img-rounded {
   border-radius: 5px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 650px;
+}
+.card-width {
+  width: 650px;
 }
 
 .center {
@@ -169,5 +170,60 @@ body {
 }
 
 .contents {
-  padding: 50px;
+  padding: 25px;
+}
+
+.chef-icon {
+  height: 25px;
+}
+
+@media (max-width: 650px) {
+  .contents {
+    padding: 10px;
+  }
+  .img-rounded,
+  .card-width {
+    width: 325px;
+  }
+
+  .navlinks {
+    font-size: 20px;
+  }
+  .brand {
+    font-size: 22px;
+  }
+  .chef-icon {
+    height: 27px;
+  }
+
+  .season-logo {
+    height: 35px;
+  }
+
+  .heading {
+    font-size: 40px;
+  }
+  .logo {
+    display: none;
+  }
+  .favorites-title {
+    font-size: 16px;
+  }
+  .favorites-img {
+    display: none;
+  }
+  input::placeholder {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 320px) {
+  .img-rounded,
+  .card-width {
+    width: 275px;
+  }
+
+  .season-logo {
+    height: 30px;
+  }
 }

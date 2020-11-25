@@ -1,10 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="col d-flex justify-content-center container result">
-    <div class="home-hero m-4">
-        <h1 class="display-3 text-center"><span><img height="150px" src="/static/images/athomecheftransparentv2.png"></span>Search By Ingredients</h1>
+    <div>
+        <h1 class="display-3 heading text-center"><span><img class="logo" height="150px" src="/static/images/athomecheftransparentv2.png"></span>Search By Ingredients</h1>
         <br>
-
         <form method="POST">
             <div class="form-group">
                 <input class="form-control col-lg-12" type="text" placeholder="Search By Ingredients You Have!"
@@ -26,8 +25,8 @@
             <br>
             {% for result in results %}
             <div class="col d-flex justify-content-center container-fluid result">
-                <div class="card" style="width: 650px" id={{result.id}}>
-                    <a href="/dish/{{result.id}}"><img style="max-width:100%;" class="card-img-top" alt={{result.title}}
+                <div class="card card-width" id={{result.id}}>
+                    <a href="/dish/{{result.id}}"><img class="card-img-top img-rounded" alt={{result.title}}
                             src="{{result.image}}"></a>
                     <br>
                     <h2 class="text-center"><a class="card-title text-center dish-title"
@@ -65,13 +64,15 @@
                 <br>
                 <h4 class="text-center" ><a class="dish-title" href="/seasonal">
                         {% if session["icon"] == "snowflake" %}
-                        <img height="25px" src="/static/images/icons/snowflake.png" alt="snowflake">
+                        <img height="30px" src="/static/images/icons/snowflake.png" alt="snowflake">
                         {% elif session["icon"] == "umbrella" %}
-                        <img height="25px" src="/static/images/icons/umbrella.png" alt="umbrella">
+                        <img height="30px" src="/static/images/icons/umbrella.png" alt="umbrella">
                         {% elif session["icon"] == "maple_leaf" %}
-                        <img height="25px" src="/static/images/icons/maple_leaf.png" alt="maple_leaf">
+                        <img height="30px" src="/static/images/icons/maple_leaf.png" alt="maple_leaf">
+                        {% elif session["icon"] == "turkey" %}
+                        <img class="season-logo" height="25px" src="/static/images/icons/turkey.png" alt="turkey">
                         {% elif session["icon"] == "tulip" %}
-                        <img height="25px" src="/static/images/icons/tulip.png" alt="tulip">
+                        <img height="30px" src="/static/images/icons/tulip.png" alt="tulip">
                         {% else %}
                         {% endif %}
                         Looking For Seasonal Dish Ideas? Click Here</a></h4>
