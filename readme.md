@@ -27,3 +27,31 @@ You can visit the site at [https://at-home-chef.herokuapp.com/
 
 [https://sendgrid.com/]()
  
+
+**IMPORTANT NOTES ON SETUP:**
+ 
+ 1. Setup PostgreSQL Database
+	 (make sure psql is installed on your machine, then open psql)
+	run the following in your shell
+	
+	createdb athomechef
+	
+2. In order to run this project you must get your own api key from the spoonacular api website along with the sendgrid api by creating an account for each and using those keys values for variable names API\_SECRET\_KEY for the Spoonacular API Key & SENDGRID\_API\_KEY for the sendgrid api key. Follow specific instructions below for setting up the SendGrid API Key and development enviroment
+
+**Sendgrid API Key setup:**
+
+1. Create a sengrid account
+2. follow instructions for setting up an email api
+3. Email API/Integration Guide/Web API/Python
+4. follow instructions for creating an API KEY
+5. Create an environment variable
+	
+ 	- Update your development environment with your SENDGRID_API_KEY. (Run the following in your shell)
+ 	
+	echo "export SENDGRID\_API\_KEY="'YOUR\_SENDGRID\_API\_KEY\_GOES\_HERE'" > 	sendgrid.env
+	
+	echo "sendgrid.env" >> .gitignore
+
+6. **IMPORTANT** Run source ./sendgrid.env (every time you start up the application and before starting up your virtual environment)
+
+

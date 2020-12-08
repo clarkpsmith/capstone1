@@ -3,15 +3,15 @@ import requests, json
 from datetime import datetime
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
-# from apikey import API_SECRET_KEY
+from apikey import API_SECRET_KEY
 from flask import Flask, render_template, request, flash, redirect, session, g, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
-
-
-
 from models import db, connect_db, season, User_Favorite, User_Comment, User, Recipe
 from forms import UserAddForm, LoginForm
+
+API_SECRET_KEY = os.environ.get('API_SECRET_KEY', API_SECRET_KEY)
+SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
 
 CURR_USER_KEY = "curr_user"
 
@@ -23,7 +23,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = (
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "it's a secret")
-API_SECRET_KEY = os.environ.get('API_SECRET_KEY', "secret_key")
+
 
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 toolbar = DebugToolbarExtension(app)
@@ -242,7 +242,7 @@ def send_grocery_list(dish_id):
     html_content= html
     )
     try:
-        sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+        sg = SendGridAPIClient(SENDGRID_API_KEY)
         response = sg.send(message)
 
         flash("Grocery list has been sent to your email address!", "success")
